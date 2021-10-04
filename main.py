@@ -96,6 +96,9 @@ class bot:
             time.sleep(2)
             # here will take the next username from the user's list.
 
+        # close browser.
+        self.bot.quit()
+
 def init():
 	bot('username', 'password', targets, message)
 	input("DONE")
