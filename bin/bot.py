@@ -1,16 +1,12 @@
-from selenium import webdriver
 import time
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
-from webdriver_manager.chrome import ChromeDriverManager
-
-driver = webdriver.Chrome(ChromeDriverManager().install())
 
 class Bot:
-    def __init__(self, username, password, targets, message):
+    def __init__(self, driver, username, password, targets, message, skip_flag=True):
         # initializing the username
         self.username = username
 
@@ -28,6 +24,8 @@ class Bot:
 
         # here it calls the driver to open chrome web browser.
         self.bot = driver
+
+        self.skip_flag = skip_flag
 
         # initializing the login function we will create
         self.login()
@@ -50,11 +48,12 @@ class Bot:
 
         # first pop-up box
         self.bot.find_element_by_xpath('//*[@id="react-root"]/section/main/div/div/div/div/button').click()
-        time.sleep(3)
+        time.sleep(4)
 
         # 2nd pop-up box
-        self.bot.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[2]').click()
-        time.sleep(5)
+        if not self.skip_flag:
+            self.bot.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[2]').click()
+            time.sleep(2)
 
         # this will click on message(direct) option.
         self.bot.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
@@ -91,5 +90,7 @@ class Bot:
             element.send_keys(Keys.RETURN)
             time.sleep(2)
 
-        # close browser.
-        self.bot.quit()
+            print('sent to {0}'.format(target['id']))
+
+        self.bot.delete_all_cookies()
+        time.sleep(2)
