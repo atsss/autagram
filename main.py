@@ -1,7 +1,7 @@
 from bin.bot import Bot
+from bin.message import message
 
 targets = ['a_i_c_moment','a_i_p_moment']
-message = 'testing of a bot'
 
 def init():
 	Bot('username', 'password', targets, message)

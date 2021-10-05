@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.common.action_chains import ActionChains
 from webdriver_manager.chrome import ChromeDriverManager
 
 driver = webdriver.Chrome(ChromeDriverManager().install())
@@ -53,11 +54,11 @@ class Bot:
 
         # 2nd pop-up box
         self.bot.find_element_by_xpath('/html/body/div[5]/div/div/div/div[3]/button[2]').click()
-        time.sleep(4)
+        time.sleep(5)
 
         # this will click on message(direct) option.
         self.bot.find_element_by_xpath('//*[@id="react-root"]/section/nav/div[2]/div/div/div[3]/div/div[2]/a').click()
-        time.sleep(3)
+        time.sleep(2)
 
         for target in self.targets:
             # This will click on the pencil icon as shown in the figure.
@@ -77,14 +78,16 @@ class Bot:
             time.sleep(2)
 
             # click on message area
-            send = self.bot.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
+            element = self.bot.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
 
             # types message
-            send.send_keys(self.message)
+            for part in self.message.split('\n'):
+                element.send_keys(part)
+                ActionChains(self.bot).key_down(Keys.SHIFT).key_down(Keys.ENTER).key_up(Keys.SHIFT).key_up(Keys.ENTER).perform()
             time.sleep(1)
 
             # send message
-            send.send_keys(Keys.RETURN)
+            element.send_keys(Keys.RETURN)
             time.sleep(2)
 
         # close browser.
