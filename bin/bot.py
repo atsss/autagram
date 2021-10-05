@@ -66,7 +66,7 @@ class Bot:
             time.sleep(2)
 
             # enter the username
-            self.bot.find_element_by_xpath('/html/body/div[6]/div/div/div[2]/div[1]/div/div[2]/input').send_keys(target)
+            self.bot.find_element_by_xpath('/html/body/div[6]/div/div/div[2]/div[1]/div/div[2]/input').send_keys(target['id'])
             time.sleep(3)
 
             # click on the username
@@ -80,8 +80,9 @@ class Bot:
             # click on message area
             element = self.bot.find_element_by_xpath('//*[@id="react-root"]/section/div/div[2]/div/div/div[2]/div[2]/div/div[2]/div/div/div[2]/textarea')
 
+            message_with_name = self.message.replace('hoge', target['id']) if target['name'] == '' else self.message.replace('hoge', target['name'])
             # types message
-            for part in self.message.split('\n'):
+            for part in message_with_name.split('\n'):
                 element.send_keys(part)
                 ActionChains(self.bot).key_down(Keys.SHIFT).key_down(Keys.ENTER).key_up(Keys.SHIFT).key_up(Keys.ENTER).perform()
             time.sleep(1)
